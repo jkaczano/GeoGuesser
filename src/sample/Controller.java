@@ -42,7 +42,7 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameResult=0.0;
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        Image image = new Image("file:src/sample/woj.png");
+        Image image = new Image("file:src/sample/Images/woj.png");
         gc.drawImage(image,0,0);
     }
     @FXML
@@ -103,7 +103,6 @@ public class Controller implements Initializable {
     public void handleStart(){
         gameActive = true;
         gameResult=0.0;
-
         String urldb = "jdbc:mysql://localhost:3306/geoguesser?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         String user = "root";
         String passwd = "1234";
