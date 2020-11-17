@@ -79,7 +79,7 @@ public class Controller implements Initializable {
             Stage stage = new Stage();
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("startView.fxml"));
-                stage.setScene(new Scene(root,300,300));
+                stage.setScene(new Scene(root,300,290));
                 stage.show();
             } catch (IOException e) {
                 e.printStackTrace();
