@@ -20,10 +20,12 @@ public class ResultController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        resultLabel.setText(String.valueOf(Controller.gameResult));
+        resultLabel.setText(String.format("%.2f",Controller.gameResult));
     }
     @FXML
     private void exitButtonOnAction(ActionEvent event){
         ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+        Controller.counter=-1;
+        Controller.gameActive=true;
     }
 }

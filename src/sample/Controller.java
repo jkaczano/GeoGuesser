@@ -11,7 +11,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -32,13 +31,13 @@ public class Controller implements Initializable {
     Label cityLabel;
 
     Connection connection;
-    Boolean gameActive = false;
+    static Boolean gameActive = false;
     List<City> listCities = new ArrayList<>(60);
 
     static double gameResult;
     double pos_x=0.0,pos_y=0.0;
-    int counter=0;
-
+    static int counter=-1;
+    long startTime,sTime,fTime;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         gameResult=0.0;
@@ -53,21 +52,32 @@ public class Controller implements Initializable {
                 @Override
                 public void handle(MouseEvent event) {}});
             canvas.setOnMouseReleased(new EventHandler<javafx.scene.input.MouseEvent>() {
+                double duration;
                 @Override
                 public void handle(MouseEvent event) {
+                    fTime = System.currentTimeMillis();
+                    if(counter==0){
+                    duration = (startTime - System.currentTimeMillis())/-1000.0;
 
-                    if(counter<20){
-                        cityLabel.setText((counter+1) + ": " + listCities.get(1).name);
+                    }
+                    else{
+                    duration = (sTime - fTime)/-1000.0;
+                    }
+                    System.out.println(duration);
+
+                    if(counter<19){
+                        cityLabel.setText((counter+2) + ": " + listCities.get(1).name);
                         pos_x = listCities.get(0).pos_x;
                         pos_y = listCities.get(0).pos_y;
                         listCities.remove(0);
+                        sTime = System.currentTimeMillis();
                     }
                     else{
                         gameActive = false;
                     }
                     double x = event.getX();
                     double y = event.getY();
-                    double res = countResult(x,y,pos_x,pos_y);
+                    double res = countResult(x,y,pos_x,pos_y,duration);
                     gameResult+=res;
                     resultLabel.setText("Wynik: " + String.format("%.2f",gameResult));
                     //label.setText(x + " " + y);
@@ -75,7 +85,7 @@ public class Controller implements Initializable {
             });
             counter++;
         }
-        else{
+        if(gameActive==false){
             Stage stage = new Stage();
             try {
                 Parent root = FXMLLoader.load(getClass().getResource("startView.fxml"));
@@ -86,11 +96,14 @@ public class Controller implements Initializable {
             }
 
         }
+
     }
 
     @FXML
     public void handleStart(){
         gameActive = true;
+        gameResult=0.0;
+
         String urldb = "jdbc:mysql://localhost:3306/geoguesser?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
         String user = "root";
         String passwd = "1234";
@@ -102,6 +115,8 @@ public class Controller implements Initializable {
             System.out.println("Error with connection");
             e.printStackTrace();
         }
+        startTime = System.currentTimeMillis();
+        System.out.println(startTime);
     }
 
     public void game(){
@@ -114,15 +129,18 @@ public class Controller implements Initializable {
                 listCities.add(new City(cities.getInt("id"),cities.getString("name"),cities.getDouble("pos_x"),cities.getDouble("pos_y")));
             }
             Collections.shuffle(listCities);
-            cityLabel.setText((counter+1) + ": " + listCities.get(0).name);
+            cityLabel.setText((counter+2) + ": " + listCities.get(0).name);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public double countResult(double x, double y, double pos_x, double pos_y){
+    public double countResult(double x, double y, double pos_x, double pos_y,double duration){
         double d = Math.sqrt((x-pos_x)*(x-pos_x)+(y-pos_y)*(y-pos_y));
-        return d;
+        if(d>300 || duration > 5)
+            return 0;
+        else
+        return 6000 - 10*d*(duration+1);
     }
 
 }

@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="665.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
       <Canvas fx:id="canvas" height="625.0" onMouseClicked="#handleClick" width="650.0" />
@@ -16,6 +15,6 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="resultLabel" layoutX="421.0" layoutY="629.0" prefHeight="17.0" prefWidth="106.0" text="Wynik: " />
+      <Label fx:id="resultLabel" layoutX="421.0" layoutY="629.0" prefHeight="17.0" prefWidth="106.0" text="Wynik: 0.0" />
    </children>
 </Pane>
